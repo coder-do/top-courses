@@ -1,4 +1,16 @@
-import { Body, Controller, Delete, Get, HttpException, HttpStatus, Param, Post, UseGuards, UsePipes, ValidationPipe } from '@nestjs/common';
+import {
+    Body,
+    Controller,
+    Delete,
+    Get,
+    HttpException,
+    HttpStatus,
+    Param,
+    Post,
+    UseGuards,
+    UsePipes,
+    ValidationPipe,
+} from '@nestjs/common';
 import { DocumentType } from '@typegoose/typegoose';
 import { BeAnObject } from '@typegoose/typegoose/lib/types';
 import { UserEmail } from '../decorators/user-email.decorator';
@@ -11,11 +23,13 @@ import { IdValidationPipe } from '../pipes/id-validation.pipe';
 
 @Controller('review')
 export class ReviewController {
-    constructor(private readonly reviewService: ReviewService) { }
+    constructor(private readonly reviewService: ReviewService) {}
 
     @UsePipes(new ValidationPipe())
     @Post('create')
-    async create(@Body() dto: CreateReviewDto): Promise<DocumentType<ReviewModel, BeAnObject>> {
+    async create(
+        @Body() dto: CreateReviewDto,
+    ): Promise<DocumentType<ReviewModel, BeAnObject>> {
         return this.reviewService.create(dto);
     }
 
@@ -24,12 +38,15 @@ export class ReviewController {
     async delete(@Param('id', IdValidationPipe) id: string) {
         const deleted = await this.reviewService.delete(id);
         if (!deleted) {
-            throw new HttpException(REVIEW_NOT_FOUND, HttpStatus.NOT_FOUND)
+            throw new HttpException(REVIEW_NOT_FOUND, HttpStatus.NOT_FOUND);
         }
     }
 
     @Get('getByProduct/:productId')
-    async getByProduct(@Param('productId', IdValidationPipe) productId: string, @UserEmail() email: string) {
-        return this.reviewService.findProductById(productId)
+    async getByProduct(
+        @Param('productId', IdValidationPipe) productId: string,
+        @UserEmail() email: string,
+    ) {
+        return this.reviewService.findProductById(productId);
     }
 }

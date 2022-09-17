@@ -1,4 +1,17 @@
-import { Body, Controller, Delete, Get, HttpCode, NotFoundException, Param, Patch, Post, UseGuards, UsePipes, ValidationPipe } from '@nestjs/common';
+import {
+    Body,
+    Controller,
+    Delete,
+    Get,
+    HttpCode,
+    NotFoundException,
+    Param,
+    Patch,
+    Post,
+    UseGuards,
+    UsePipes,
+    ValidationPipe,
+} from '@nestjs/common';
 import { JwtAuthGuard } from '../auth/guards/jwt.guard';
 import { CreateTopPageDto } from './dto/create-top-page.dto';
 import { FindTopPageDto } from './dto/find-top-page.dto';
@@ -6,10 +19,9 @@ import { PAGE_NOT_FOUND_ERROR } from './top-page.constants';
 import { TopPageModel } from './top-page.model';
 import { TopPageService } from './top-page.service';
 
-
 @Controller('top-page')
 export class TopPageController {
-    constructor(private readonly topPageservice: TopPageService) { }
+    constructor(private readonly topPageservice: TopPageService) {}
 
     @UseGuards(JwtAuthGuard)
     @Post('create')
@@ -23,7 +35,7 @@ export class TopPageController {
         const page = await this.topPageservice.findById(id);
 
         if (!page) {
-            throw new NotFoundException(PAGE_NOT_FOUND_ERROR)
+            throw new NotFoundException(PAGE_NOT_FOUND_ERROR);
         }
 
         return page;
@@ -34,7 +46,7 @@ export class TopPageController {
         const page = await this.topPageservice.findByAlias(alias);
 
         if (!page) {
-            throw new NotFoundException(PAGE_NOT_FOUND_ERROR)
+            throw new NotFoundException(PAGE_NOT_FOUND_ERROR);
         }
 
         return page;
@@ -46,7 +58,7 @@ export class TopPageController {
         const page = await this.topPageservice.update(id, dto);
 
         if (!page) {
-            throw new NotFoundException(PAGE_NOT_FOUND_ERROR)
+            throw new NotFoundException(PAGE_NOT_FOUND_ERROR);
         }
 
         return page;
@@ -58,7 +70,7 @@ export class TopPageController {
         const page = await this.topPageservice.delete(id);
 
         if (!page) {
-            throw new NotFoundException(PAGE_NOT_FOUND_ERROR)
+            throw new NotFoundException(PAGE_NOT_FOUND_ERROR);
         }
     }
 
@@ -66,6 +78,6 @@ export class TopPageController {
     @HttpCode(200)
     @Post('find')
     async find(@Body() { firstCategory }: FindTopPageDto) {
-        return this.topPageservice.findBycategory(firstCategory)
+        return this.topPageservice.findBycategory(firstCategory);
     }
 }

@@ -6,7 +6,10 @@ import { TopLevelCategory, TopPageModel } from './top-page.model';
 
 @Injectable()
 export class TopPageService {
-    constructor(@InjectModel(TopPageModel) private readonly topPageModel: ModelType<TopPageModel>) { }
+    constructor(
+        @InjectModel(TopPageModel)
+        private readonly topPageModel: ModelType<TopPageModel>,
+    ) {}
 
     async create(dto: CreateTopPageDto) {
         return this.topPageModel.create(dto);
@@ -21,11 +24,15 @@ export class TopPageService {
     }
 
     async findBycategory(firstCategory: TopLevelCategory) {
-        return this.topPageModel.find({ firstCategory }, { alias: 1, secondCategory: 1, title: 1 }).exec();
+        return this.topPageModel
+            .find({ firstCategory }, { alias: 1, secondCategory: 1, title: 1 })
+            .exec();
     }
 
     async update(id: string, dto: CreateTopPageDto) {
-        return this.topPageModel.findByIdAndUpdate(id, dto, { new: true }).exec();
+        return this.topPageModel
+            .findByIdAndUpdate(id, dto, { new: true })
+            .exec();
     }
 
     async delete(id: string) {

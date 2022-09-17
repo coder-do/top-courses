@@ -1,7 +1,13 @@
-import { prop } from "@typegoose/typegoose";
-import { Base, TimeStamps } from "@typegoose/typegoose/lib/defaultClasses";
-import { Type } from "class-transformer";
-import { IsArray, IsNumber, IsOptional, IsString, ValidateNested } from "class-validator";
+import { prop } from '@typegoose/typegoose';
+import { Base, TimeStamps } from '@typegoose/typegoose/lib/defaultClasses';
+import { Type } from 'class-transformer';
+import {
+    IsArray,
+    IsNumber,
+    IsOptional,
+    IsString,
+    ValidateNested,
+} from 'class-validator';
 
 class ProductCharacteristicsDto {
     @IsString()
@@ -11,7 +17,7 @@ class ProductCharacteristicsDto {
     value: string;
 }
 
-export interface CreateProductDto extends Base { }
+export type CreateProductDto = Base;
 export class CreateProductDto extends TimeStamps {
     @IsString()
     image: string;
@@ -49,5 +55,5 @@ export class CreateProductDto extends TimeStamps {
     @IsArray()
     @ValidateNested()
     @Type(() => ProductCharacteristicsDto)
-    characteristics: ProductCharacteristicsDto[]
+    characteristics: ProductCharacteristicsDto[];
 }

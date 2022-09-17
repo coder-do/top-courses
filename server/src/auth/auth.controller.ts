@@ -1,18 +1,26 @@
-import { BadRequestException, Body, Controller, HttpCode, Post, UsePipes, ValidationPipe } from '@nestjs/common';
+import {
+    BadRequestException,
+    Body,
+    Controller,
+    HttpCode,
+    Post,
+    UsePipes,
+    ValidationPipe,
+} from '@nestjs/common';
 import { EXISTING_USER_ERROR } from './auth.constants';
 import { AuthService } from './auth.service';
 import { AuthDto } from './dto/auth.dto';
 
 @Controller('auth')
 export class AuthController {
-    constructor(private readonly authService: AuthService) { }
+    constructor(private readonly authService: AuthService) {}
 
     @UsePipes(new ValidationPipe())
     @Post('register')
     async register(@Body() dto: AuthDto) {
         const exists = this.authService.findUser(dto.login);
         if (!exists) {
-            throw new BadRequestException(EXISTING_USER_ERROR)
+            throw new BadRequestException(EXISTING_USER_ERROR);
         }
         return this.authService.createUser(dto);
     }
@@ -21,7 +29,10 @@ export class AuthController {
     @HttpCode(200)
     @Post('login')
     async login(@Body() dto: AuthDto) {
-        const { email } = await this.authService.validateUser(dto.login, dto.password);
+        const { email } = await this.authService.validateUser(
+            dto.login,
+            dto.password,
+        );
         return this.authService.login(email);
     }
 }

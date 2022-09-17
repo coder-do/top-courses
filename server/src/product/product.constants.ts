@@ -1,1 +1,1 @@
-export const PRODUCT_NOT_FOUND = 'Продукт с данным ID не найден!'
+export const PRODUCT_NOT_FOUND = 'Продукт с данным ID не найден!';

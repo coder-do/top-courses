@@ -8,7 +8,10 @@ import { ReviewModel } from 'src/review/review.model';
 
 @Injectable()
 export class ProductService {
-    constructor(@InjectModel(ProductModel) private readonly productModel: ModelType<ProductModel>) { }
+    constructor(
+        @InjectModel(ProductModel)
+        private readonly productModel: ModelType<ProductModel>,
+    ) {}
 
     async create(dto: CreateProductDto) {
         return this.productModel.create(dto);
@@ -23,48 +26,59 @@ export class ProductService {
     }
 
     async update(id: string, dto: CreateProductDto) {
-        return this.productModel.findByIdAndUpdate(id, dto, { new: true }).exec();
+        return this.productModel
+            .findByIdAndUpdate(id, dto, { new: true })
+            .exec();
     }
 
     async findWithReviews(dto: FindProductDto) {
-        return this.productModel.aggregate([
-            {
-                $match: {
-                    categories: dto.category
-                }
-            },
-            {
-                $sort: {
-                    _id: 1
-                }
-            },
-            {
-                $limit: dto.limit
-            },
-            {
-                $lookup: {
-                    from: 'review',
-                    localField: '_id',
-                    foreignField: 'productId',
-                    as: 'reviews'
-                }
-            },
-            {
-                $addFields: {
-                    reviewCount: { $size: '$reviews' },
-                    reviewAvg: { $avg: 'reviews.rating' },
-                    reviews: {
-                        $function: {
-                            body: `function (reviews) {
+        return this.productModel
+            .aggregate([
+                {
+                    $match: {
+                        categories: dto.category,
+                    },
+                },
+                {
+                    $sort: {
+                        _id: 1,
+                    },
+                },
+                {
+                    $limit: dto.limit,
+                },
+                {
+                    $lookup: {
+                        from: 'review',
+                        localField: '_id',
+                        foreignField: 'productId',
+                        as: 'reviews',
+                    },
+                },
+                {
+                    $addFields: {
+                        reviewCount: { $size: '$reviews' },
+                        reviewAvg: { $avg: 'reviews.rating' },
+                        reviews: {
+                            $function: {
+                                body: `function (reviews) {
                                 reviews.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
                                 return reviews;
                             }`,
-                            args: ['$reviews'],
-                            lang: 'js'
-                        }
-                    }
-                }
-            }
-        ]).exec() as Promise<ProductModel & { review: ReviewModel[], reviewCount: number, reviewAvg: number }[]>;
+                                args: ['$reviews'],
+                                lang: 'js',
+                            },
+                        },
+                    },
+                },
+            ])
+            .exec() as Promise<
+            ProductModel &
+                {
+                    review: ReviewModel[];
+                    reviewCount: number;
+                    reviewAvg: number;
+                }[]
+        >;
     }
 }

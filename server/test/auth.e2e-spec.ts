@@ -7,7 +7,7 @@ import { AuthDto } from '../src/auth/dto/auth.dto';
 
 const loginDto: AuthDto = {
     login: 'mkiloyan@mail.ru',
-    password: 'mkiloyan'
+    password: 'mkiloyan',
 };
 
 describe('AuthController (e2e)', () => {
@@ -38,8 +38,8 @@ describe('AuthController (e2e)', () => {
             .send({ ...loginDto, password: '2' })
             .expect(401, {
                 statusCode: 401,
-                message: "Пароль пользователя не верный!",
-                error: "Unauthorized"
+                message: 'Пароль пользователя не верный!',
+                error: 'Unauthorized',
             });
     });
 
@@ -49,8 +49,8 @@ describe('AuthController (e2e)', () => {
             .send({ ...loginDto, login: 'aaa@a.ru' })
             .expect(401, {
                 statusCode: 401,
-                message: "Пользователь не найден!",
-                error: "Unauthorized"
+                message: 'Пользователь не найден!',
+                error: 'Unauthorized',
             });
     });
 

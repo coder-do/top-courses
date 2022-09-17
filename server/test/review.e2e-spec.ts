@@ -14,8 +14,8 @@ const testDto: CreateReviewDto = {
     description: 'dddd',
     title: 'title',
     rating: 5,
-    productId: prodId
-}
+    productId: prodId,
+};
 
 describe('AppController (e2e)', () => {
     let app: INestApplication;
@@ -34,14 +34,14 @@ describe('AppController (e2e)', () => {
             .post('/auth/login')
             .send({
                 login: 'mkiloyan@mail.ru',
-                password: 'mkiloyan'
+                password: 'mkiloyan',
             } as AuthDto);
 
         accessToken = body.access_token;
     });
 
     afterAll(async () => {
-        disconnect()
+        disconnect();
     });
 
     it('/review/create - POST -> SUCCESS', async () => {
@@ -52,7 +52,7 @@ describe('AppController (e2e)', () => {
             .then(({ body }: request.Response) => {
                 createdId = body._id;
                 expect(createdId).toBeDefined();
-            })
+            });
     });
 
     it('/review/create - POST -> FAIL', async () => {
@@ -62,7 +62,7 @@ describe('AppController (e2e)', () => {
             .expect(400, {
                 statusCode: 400,
                 message: ['rating must not be greater than 5'],
-                error: 'Bad Request'
+                error: 'Bad Request',
             });
     });
 
@@ -72,7 +72,7 @@ describe('AppController (e2e)', () => {
             .expect(200)
             .then(({ body }: request.Response) => {
                 expect(body.length).toBe(1);
-            })
+            });
     });
 
     it('/review/findById - GET -> FAIL', async () => {
@@ -81,7 +81,7 @@ describe('AppController (e2e)', () => {
             .expect(200)
             .then(({ body }: request.Response) => {
                 expect(body.length).toBe(0);
-            })
+            });
     });
 
     it('/review/delete - DELETE -> FAIL', async () => {
@@ -90,7 +90,7 @@ describe('AppController (e2e)', () => {
             .set('Authorization', `Bearer ${accessToken}`)
             .expect(404, {
                 statusCode: 404,
-                message: REVIEW_NOT_FOUND
+                message: REVIEW_NOT_FOUND,
             });
     });
 

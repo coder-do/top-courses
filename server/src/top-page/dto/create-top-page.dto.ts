@@ -1,8 +1,15 @@
-import { prop } from "@typegoose/typegoose";
-import { Base, TimeStamps } from "@typegoose/typegoose/lib/defaultClasses";
-import { Type } from "class-transformer";
-import { IsArray, IsEnum, IsNumber, IsOptional, IsString, ValidateNested } from "class-validator";
-import { TopLevelCategory } from "../top-page.model";
+import { prop } from '@typegoose/typegoose';
+import { Base, TimeStamps } from '@typegoose/typegoose/lib/defaultClasses';
+import { Type } from 'class-transformer';
+import {
+    IsArray,
+    IsEnum,
+    IsNumber,
+    IsOptional,
+    IsString,
+    ValidateNested,
+} from 'class-validator';
+import { TopLevelCategory } from '../top-page.model';
 
 class HHData {
     @IsNumber()
@@ -50,7 +57,7 @@ export class CreateTopPageDto {
     @IsArray()
     @ValidateNested()
     @Type(() => TopPageAdvantages)
-    advantages: TopPageAdvantages[]
+    advantages: TopPageAdvantages[];
 
     @IsString()
     seoText: string;
