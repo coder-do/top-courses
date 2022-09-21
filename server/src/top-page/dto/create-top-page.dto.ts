@@ -1,5 +1,3 @@
-import { prop } from '@typegoose/typegoose';
-import { Base, TimeStamps } from '@typegoose/typegoose/lib/defaultClasses';
 import { Type } from 'class-transformer';
 import {
     IsArray,

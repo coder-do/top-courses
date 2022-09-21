@@ -8,7 +8,9 @@ import { ReviewModule } from './review/review.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypegooseModule } from 'nestjs-typegoose';
 import { getMongoConfig } from './config/mongo.config';
-import { FilesController } from './files/files.controller';
+import { FilesModule } from './files/files.module';
+import { TelegramModule } from './telegram/telegram.module';
+import { getTelegramConfig } from './config/telegram.config';
 
 @Module({
     imports: [
@@ -22,8 +24,14 @@ import { FilesController } from './files/files.controller';
         ProductModule,
         TopPageModule,
         ReviewModule,
+        FilesModule,
+        TelegramModule.forRootAsync({
+            imports: [ConfigModule],
+            inject: [ConfigService],
+            useFactory: getTelegramConfig
+        })
     ],
-    controllers: [AppController, FilesController],
+    controllers: [AppController],
     providers: [AppService],
 })
-export class AppModule {}
+export class AppModule { }

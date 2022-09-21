@@ -17,7 +17,7 @@ class ProductCharacteristicsDto {
     value: string;
 }
 
-export type CreateProductDto = Base;
+export interface CreateProductDto extends Base { }
 export class CreateProductDto extends TimeStamps {
     @IsString()
     image: string;

@@ -20,17 +20,36 @@ import { REVIEW_NOT_FOUND } from './review.constants';
 import { ReviewModel } from './review.model';
 import { ReviewService } from './review.service';
 import { IdValidationPipe } from '../pipes/id-validation.pipe';
+import { TelegramService } from '../telegram/telegram.service';
 
 @Controller('review')
 export class ReviewController {
-    constructor(private readonly reviewService: ReviewService) {}
+    constructor(
+        private readonly reviewService: ReviewService,
+        private readonly tgService: TelegramService
+    ) { }
 
     @UsePipes(new ValidationPipe())
     @Post('create')
     async create(
         @Body() dto: CreateReviewDto,
     ): Promise<DocumentType<ReviewModel, BeAnObject>> {
+        await this.notify(dto);
         return this.reviewService.create(dto);
+    }
+
+    @UsePipes(new ValidationPipe())
+    @Post('notify')
+    async notify(
+        @Body() dto: CreateReviewDto,
+    ) {
+        const message = `Добавлен новый отзыв!\n`
+            + `Имя: ${dto.name}\n`
+            + `Заголовок: ${dto.title}\n`
+            + `Описание: ${dto.description}\n`
+            + `Рейтинг: ${dto.rating}\n`
+            + `ID Продукта: ${dto.productId}`;
+        return this.tgService.sendMessage(message);
     }
 
     @UseGuards(JwtAuthGuard)
